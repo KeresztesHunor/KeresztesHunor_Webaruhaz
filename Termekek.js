@@ -1,28 +1,35 @@
 import Termek from "./Termek.js";
+import Aszinkron from "./Aszinkron.js";
 
 class Termekek
 {
-    #termekek;
-    #kedvencek;
+    #termekek = [];
+    #kedvencek = {};
 
     constructor()
     {
-        this.#termekek = [];
-        this.#kedvencek = [];
-        this.adatBetolt("adat.json", adat =>
-        {
+        const ASZINKRON = new Aszinkron();
+        ASZINKRON.adatBetolt("http://localhost:3000/adatLista", adatok => {
             const TERMEKEK = $("#termekek");
-            adat.adatLista.forEach(termek => this.#termekek.push(new Termek(TERMEKEK, termek.gyarto, termek.nev, termek.evjarat)));
-            $(window).on("kedvencekKozeRak", event => this.#kedvencek.push(event.detail));
+            adatok.forEach(termek => this.#termekek.push(new Termek(TERMEKEK, termek.id, termek.gyarto, termek.nev, termek.evjarat)));
         });
-    }
-
-    adatBetolt(vegpont, callback)
-    {
-        fetch(vegpont)
-            .then(response => response.json())
-            .then(data => callback(data))
-            .catch(error => console.log(error));
+        const KEDVENCEK = $("#kedvencek");
+        $(window).on("kedvencekKozeRak", event => {
+            const TERMEK_ID = event.detail.getId();
+            if (!this.#kedvencek.hasOwnProperty(TERMEK_ID))
+            {
+                event.detail.megjelenitDivben(KEDVENCEK);
+                this.#kedvencek[TERMEK_ID] = {
+                    objektum: event.detail,
+                    htmlElem: $(KEDVENCEK.children("div:last-child"))
+                };
+            }
+        });
+        $(window).on("kedvencekbolKivesz", event => {
+            const KEDVENC_ID = event.detail.getId();
+            this.#kedvencek[KEDVENC_ID].htmlElem.remove();
+            delete this.#kedvencek[KEDVENC_ID];
+        });
     }
 }
 

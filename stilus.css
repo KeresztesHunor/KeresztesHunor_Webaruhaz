@@ -2,17 +2,38 @@
   box-sizing: border-box;
 }
 
+main {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
+
+article > h2 {
+  text-align: center;
+}
+
 #termekek {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-#termekek > div {
+.termek {
   width: 192px;
   margin: 4px;
   padding: 4px;
   border: 1px solid black;
   border-radius: 8px;
   text-align: center;
+}
+
+aside {
+  border-left: 1px solid black;
+}
+
+aside > h2 {
+  text-align: center;
+}
+
+#kedvencek > .termek {
+  margin: 8px auto;
 }
