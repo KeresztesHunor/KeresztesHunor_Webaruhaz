@@ -25,11 +25,23 @@ class Termekek
                 };
             }
         });
-        $(window).on("kedvencekbolKivesz", event => {
-            const KEDVENC_ID = event.detail.getId();
-            this.#kedvencek[KEDVENC_ID].htmlElem.remove();
-            delete this.#kedvencek[KEDVENC_ID];
+        $(window).on("kedvencekbolKivesz", event => this.#kedvencekbolKivesz(event.detail.getId()));
+        $(window).on("adatotTorol", event => {
+            const TERMEK_ID = event.detail.getId();
+            this.#termekek[TERMEK_ID].getHTMLElem().remove();
+            this.#termekek.splice(TERMEK_ID, 1);
+            if (this.#kedvencek.hasOwnProperty(TERMEK_ID))
+            {
+                this.#kedvencekbolKivesz(TERMEK_ID);
+            }
+            ASZINKRON.adatTorol("http://localhost:3000/adatLista", TERMEK_ID);
         });
+    }
+
+    #kedvencekbolKivesz(id)
+    {
+        this.#kedvencek[id].htmlElem.remove();
+        delete this.#kedvencek[id];
     }
 }
 

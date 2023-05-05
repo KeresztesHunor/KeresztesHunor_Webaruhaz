@@ -7,31 +7,27 @@ class Aszinkron
 
     adatBetolt(vegpont, callback)
     {
+        this.#adatotKezel(vegpont, "GET", callback);
+    }
+
+    adatTorol(vegpont, id)
+    {
+        this.#adatotKezel(vegpont + "/" + id, "DELETE", data => {
+
+        });
+    }
+
+    #adatotKezel(vegpont, method, callback)
+    {
         fetch(vegpont, {
-            method: "GET",
+            method: method,
             headers: {
                 "Content-Type": "application/json"
             }
         })
             .then(response => response.json())
             .then(callback)
-            .catch(error => console.log(error));
-    }
-
-    adatTorol(vegpont, id)
-    {
-        vegpont += "/" + id;
-        fetch(vegpont, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-
-            })
-            .catch(error => console.log(error));
+            .catch(console.log);
     }
 }
 

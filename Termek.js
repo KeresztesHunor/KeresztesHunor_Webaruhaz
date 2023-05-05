@@ -6,6 +6,7 @@ class Termek
     #gyarto;
     #nev;
     #evjarat;
+    #htmlElem;
 
     constructor(szuloElem, id, gyarto, nev, evjarat)
     {
@@ -14,6 +15,7 @@ class Termek
         this.#nev = nev;
         this.#evjarat = evjarat;
         this.megjelenitDivben(szuloElem);
+        this.#htmlElem = szuloElem.children("div:last-child");
     }
 
     megjelenitDivben(szuloElem)
@@ -61,6 +63,11 @@ class Termek
     getEvjarat()
     {
         return this.#evjarat;
+    }
+
+    getHTMLElem()
+    {
+        return this.#htmlElem;
     }
 }
 
